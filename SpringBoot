@@ -1,0 +1,5 @@
+## 常见注解
+**@ConfigurationProperties**和**@Value**注解用于获取配置文件中的属性定义并绑定到Java Bean或属性中
+**@Autowired**是一种注解，可以对成员变量、方法和构造函数进行标注，来完成自动装配的工作
+**@JsonProperty**映射接口字段和类字段，当两者名字不一样的时候
+

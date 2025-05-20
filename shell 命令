@@ -1,0 +1,118 @@
+#!/bin/bash
+
+# 列出目录下文件，并且只要结尾为8位数字的文件 只要YYYYmmdd结尾的文件
+find /path/to/dir -type f -regextype posix-extended -regex '.*[0-9]{8}$' | grep -E '/[0-9]{8}$'
+# 列出hdfs目录下文件，并且只要结尾为8位数字的文件 只要YYYYmmdd结尾的文件
+hadoop fs -ls /data_result/data_import/hbase/user_gid/dw_user_ids2gid | awk '$NF ~ /[0-9]{8}$/ {print $NF}'
+
+
+#获取目录文件大小并且选择最后一行
+hadoop fs -du -h $line | tail -n 1 >> file_size_result.txt
+
+#遍历文件里的每一行内容
+
+file="example.txt"
+cat "$file" | while read line
+do
+    # 处理每一行数据，例如打印出来
+    echo "$line"
+done
+
+# 查看 grep 过滤出来的前若干条
+grep "关键词" file.txt | cut -c 1-100
+
+end_time=$(date +%s)  当前时间的秒
+elapsed=$((end_time-start_time)) 数值加减运算
+
+# 检查文件是否存在
+if [ ! -f "$file" ]; then
+    echo "File not found: $file"
+    exit 1
+fi
+
+
+curl -s "http://localhost:8080/hotsearch" | grep -A 5 "wallpaper-menu"
+-A 5：表示“after”，即除了匹配到 wallpaper-menu 这行，还会额外显示 这行之后的 5 行。
+
+#在shell中跑spark
+
+/opt/spark23/bin/spark-shell  --master yarn \
+--executor-memory 4G \
+--num-executors 300 \
+--conf spark.sql.parquet.binaryAsString=true \
+--conf spark.default.parallelism=2000 \
+--conf spark.sql.shuffle.partitions=2000 \
+--driver-memory 5g \
+--name app_clean_user_uninstall_applist_all_sort_${time_to_import} \
+--queue ga_ym << EOF
+
+    for (i <- 1 to  6){
+      val input=s"${hdfs_incr_ck_output}/$i/${log_date}"
+      println("输入路径 "+input)
+      val output=s"${hdfs_incr_ck_output}_sort/$i/${log_date}"
+      println("输出路径 "+output)
+      spark.read.parquet(input).sort("gid").write.mode("overwrite").parquet(output)
+    }
+
+:quit
+
+# 使用spark-sql
+/opt/spark23/bin/spark-sql --master yarn --executor-memory 2G  --driver-memory 2g --num-executors 2
+
+
+
+python -m ipykernel install --user --name openai --display-name "openai"
+
+
+
+
+# 在shell执行curl命令
+# 读取gid.txt文件中的每一行
+while IFS= read -r i
+do
+  response=$(curl -s -f --location \
+    --request POST 'http://172.18.64.200:39007/ys-bi-app-api-management/v1/lbs/queryIdSetByWifimacsMergeV2' \
+    --header 'Content-Type: application/json' \
+    -d '{
+    "wifimacs":[
+      { 
+        "startTime":1697157666000,
+        "endTime":1697177666000,
+        "wifimac": "'"$i"'",
+        "wifiType": "wifi",
+        "connectTypes": [
+                  -1,
+                  1,
+                  0
+        ],
+        "connectTypes":[0],
+      }
+
+    ],
+    "needEmptyGeohashEssid":true
+    }') 
+  echo $response
+done < gid.txt
+
+
+-- split 文件 合并文件
+split -b 10M large_file.txt output_
+cat output_* > combined_file.txt
+
+
+
+
+  if [ $? -eq 0 ]; then
+    # 使用jq解析JSON并获取唯一的wifimac列表
+    unique_wifimacs=$(echo "$response" | jq -r '.data[].wifimac' | sort -u)
+    echo "Unique WiFi MACs for id $i:"
+    echo "$unique_wifimacs"
+    # 统计数量
+    count=$(echo "$unique_wifimacs" | wc -l)
+    echo "Total unique WiFi MACs: $count"
+  else
+    echo "Error fetching data for id $i" >&2
+  fi
+
+查看进程
+ps aux | grep pyspark

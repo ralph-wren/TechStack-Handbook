@@ -1,0 +1,30 @@
+# HBASE
+# 线上hbase
+1. hbase 存储路径  hdfs://hzxs-ga-hbase-xs/apps/hbase/data/data/gt_dw
+2. hbase的存储格式，每个表有多个region，每个region目录里面，每个列簇一个目录，每个列簇下面多个hfile文件，
+3. 小合并的时候会把小的hfile合并，不删除数据，大合并会把列簇下面所有hfile合并成一个，删除多余数据
+
+# hbase shell
+1. scan 'gt_dw:profile_gid_history_loc_expand', FILTER => "PrefixFilter('12')",LIMIT=>1  列前缀过滤
+
+在 HBase 中，一个 Region（区域）就是表中某个 key 范围内的数据的管理单元，而每个列族（Column Family）在 Region 中都会对应一个单独的 Store，这个 Store 会维护该列族下的所有数据。
+Region
+├── Store（cf1）  ← 列簇 cf1
+│   ├── MemStore（内存写缓存）
+│   └── HFiles（多个磁盘文件）
+├── Store（cf2）  ← 列簇 cf2
+│   ├── MemStore
+│   └── HFiles
+...
+每次查询（Get 或 Scan）都会为每个被访问的列簇（Column Family）创建一个新的 StoreScanner 实例。这是 HBase 的标准读取机制。
+StoreScanner 是 HBase 从磁盘（HFile）和内存（MemStore）中合并数据的扫描器，用来按列族读数据、按行合并结果，并返回一个一个的 Cell 给你。
+Region（regionserver 里的一个表分片）
+└──> Store（列族级别的存储单元）
+     └──> StoreScanner（负责合并读取数据）
+           ├── MemStoreScanner（内存中的数据）
+           ├── HFileScanner（磁盘文件）
+           └── KeyValueHeap（做 merge-sort）
+
+
+# HADOPP
+1. hdfs dfs -du -h /path/to/directory | sort -h  按文件大小排序

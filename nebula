@@ -1,0 +1,152 @@
+创建space
+CREATE SPACE saas_graph (partition_num = 3, vid_type = FIXED_STRING(35)) COMMENT = "gt数据"
+
+添加 tag
+
+CREATE tag `gid` (ts timestamp NULL DEFAULT now() COMMENT "出现时间")  COMMENT = "点类型-gid";
+CREATE tag `mac` (ts timestamp NULL DEFAULT now() COMMENT "出现时间")  COMMENT = "点类型-mac";
+CREATE tag `wifi` ()  COMMENT = "点类型-wifi";
+CREATE tag `wg` ()  COMMENT = "点类型-wg";
+CREATE tag `ip` ()  COMMENT = "点类型-wg";
+
+添加edge type
+
+CREATE edge `connect` (`ts` timestamp NULL DEFAULT now() COMMENT "关联时间")  COMMENT = "边类型-连接";
+CREATE edge `scan` (`ts` timestamp NULL DEFAULT now() COMMENT "关联时间")  COMMENT = "边类型-扫描";
+CREATE edge `bind` (`ts` timestamp NULL DEFAULT now() COMMENT "绑定时间")  COMMENT = "边类型-绑定关系";
+#写入数据
+
+#写入gid属性的点
+
+INSERT VERTEX gid(ts) VALUES "gid1":(1625469277);
+INSERT VERTEX gid(ts) VALUES "gid2":(1625469277);
+INSERT VERTEX gid(ts) VALUES "gid3":(1625469277);
+INSERT VERTEX gid(ts) VALUES "gid4":(1625469277);
+INSERT VERTEX gid(ts) VALUES "gid5":(1625469277);
+INSERT VERTEX gid(ts) VALUES "gid6":(1625469277);
+#写入mac属性的点
+
+INSERT VERTEX mac(ts) VALUES "mac1":(1625469277);
+INSERT VERTEX mac(ts) VALUES "mac2":(1625469277);
+INSERT VERTEX mac(ts) VALUES "mac3":(1625469277);
+写入wifi类型的点
+INSERT VERTEX wifi(ts) VALUES "wifi1":(1625469277);
+INSERT VERTEX wifi(ts) VALUES "wifi2":(1625469277);
+INSERT VERTEX wifi(ts) VALUES "wifi3":(1625469277);
+写入wg类型的点
+INSERT VERTEX wg(ts) VALUES "wg1":(1625469277);
+INSERT VERTEX wg(ts) VALUES "wg2":(1625469277);
+INSERT VERTEX wg(ts) VALUES "wg3":(1625469277);
+#写入关联时间的边
+
+INSERT  EDGE bind(ts) values "gid1"->"mac1":(1625469277);
+INSERT  EDGE bind(ts) values "gid2"->"mac2":(1625469277);
+INSERT  EDGE bind(ts) values "gid3"->"mac3":(1625469277);
+INSERT  EDGE connect(ts) values "gid1"->"wifi1":(1625469278);
+INSERT  EDGE connect(ts) values "gid2"->"wifi2":(1625469278);
+INSERT  EDGE connect(ts) values "gid3"->"wifi3":(1625469278);
+
+INSERT  EDGE scan(ts) values "gid1"->"wifi1":(1625469278);
+INSERT  EDGE scan(ts) values "gid1"->"wifi1":(1625469279);
+
+INSERT  EDGE scan(ts) values "gid2"->"wifi1":(1625469278);
+INSERT  EDGE scan(ts) values "gid1"->"wifi2":(1625469278);
+INSERT  EDGE scan(ts) values "gid1"->"wifi3":(1625469278);
+
+INSERT  EDGE connect(ts) values "gid1"->"wg1":(1625469278);
+INSERT  EDGE connect(ts) values "gid2"->"wg2":(1625469278);
+INSERT  EDGE connect(ts) values "gid3"->"wg3":(1625469278);
+
+INSERT  EDGE connect(ts) values "wifi1"->"wg1":(1625469278);
+INSERT  EDGE connect(ts) values "wifi2"->"wg2":(1625469278);
+INSERT  EDGE connect(ts) values "wifi3"->"wg3":(1625469278);
+—————
+
+INSERT EDGE scan (ts) VALUES "gid1"->"wifi3"@2023021102:(1625469279);
+INSERT EDGE scan (ts) VALUES "gid1"->"wifi3"@2023021202:(1625469289);
+INSERT EDGE scan (ts) VALUES "gid1"->"wifi3"@2023021302:(1625469299);
+INSERT EDGE scan (ts) VALUES "gid1"->"wifi3"@2023021402:(1625469379);
+创建索引
+CREATE TAG INDEX IF NOT EXISTS ts_index1 ON gid(ts);  
+CREATE EDGE INDEX IF NOT EXISTS follow_index on follow();
+索引重构
+
+REBUILD TAG INDEX ts_index1；
+#确认重建索引成功，121 是REBUILD 命令返回的jobID
+nebula> SHOW JOB 121;
+
+查询 语句
+MATCH语句中WHERE子句使用 id() 函数指定了点的 VID，不需要创建索引即可执行。
+当遍历所有点或边时，例如MATCH (v) RETURN v LIMIT N、MATCH ()-[e]->() RETURN e LIMIT N。
+当遍历指定 Tag 的点，例如MATCH (v:player) RETURN v LIMIT N。
+当遍历指定 Edge Type 并指定边的方向，例如MATCH ()-[e:follow]->() RETURN e LIMIT N。
+—————————————————————
+需要匹配拥有多个 Tag 的点，可以用英文冒号（:）
+MATCH (v:tag1:tag2) RETURN v   LIMIT 10
+—————————————————————
+
+匹配点的属性
+MATCH (v:gid{ts:1625469277}) return v limit 50;
+MATCH (v:gid{ts:1625469277}) return v ;
+MATCH (v)   WITH v, properties(v) as props, keys(properties(v)) as kk \
+        LIMIT 10000 WHERE [i in kk where props[i] == "Tim Duncan"] \
+        RETURN v;
+—————————————————————
+
+匹配点的id
+MATCH (v)  WHERE id(v) == 'gid1'  RETURN v
+要匹配多个点的 ID，可以用WHERE id(v) IN [vid_list]
+MATCH (v:gid { ts: 1625469277 })--(v2) \
+        WHERE id(v2) IN ["mac1", "wg1"] \
+        RETURN v2;
+—————————————————————
+
+匹配连接的点
+match (v:gid{ts:1625469277})-->(v1:wifi) return v2.wifi.ts
+—————————————————————
+
+匹配路径
+match p=(v:gid{ts:1625469277})-->(v1:wifi) return p
+—————————————————————
+
+匹配边的属性
+match (v:gid)-[e:scan|connect]->(v2:wifi) return e limit 50;
+
+match (v:gid)-[e:scan]->(v2:wifi) 
+WITH e, properties(e) as props, keys(properties(e)) as kk，rank(e) as rk \
+        LIMIT 10000 WHERE  rk>=2023021102 and rk <=2023021302 \
+        RETURN e   ;
+MATCH ()-[e]->() \
+        WITH e, properties(e) as props, keys(properties(e)) as kk \
+        LIMIT 10000 WHERE [i in kk where props[i] ==1625469278] \
+        RETURN e;
+MATCH ()-[e]->() \
+        WITH e, type(e) as edge_type \
+        LIMIT 10000 WHERE (edge_type>="connect" and edge_type<="scan")\
+        RETURN e;
+—————————————————————
+#匹配多个 Edge type
+match (v:gid{ts:1625469277})-[e:scan|connect|bind]->(v2) return e
+
+match (v:gid:mac:wifi)-[e:scan|connect|bind]->(v2)
+Where gid.ts>=1625469277
+return e
+
+match (v)-[e:connect*1..3]->(v2) return e ;
+
+#匹配最短路径
+match p= allShortestPaths( (v:gid(ts:1625469277)) -[e*..5]-(v1:mac) ) return p;
+
+#查询边
+match ()<-[e]-() return e limit 50
+match ()<-[e:edge_tag]-() return e limit 50
+
+#直接捞取
+match(v) return v limit 50 ;
+MATCH ()-[e]->() RETURN e LIMIT N
+
+#tag匹配
+match(v:connect) return v:connect limit 50 ;
+
+
+https://cf.cloudglab.cn/pages/viewpage.action?pageId=226212897
