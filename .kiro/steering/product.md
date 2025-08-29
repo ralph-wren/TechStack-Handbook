@@ -1,21 +1,29 @@
-# Product Overview
+# 项目概述
 
-This repository is a comprehensive technical documentation collection and knowledge base covering modern software engineering technologies and practices.
+这是一个全面的技术文档集合和知识库，涵盖现代软件工程技术和实践。
 
-## Purpose
-- Centralized reference documentation for big data technologies, programming languages, and infrastructure tools
-- Technical learning materials and guides for software engineers and data engineers
-- Best practices and implementation patterns for distributed systems and data processing
+## 项目目标
+- 为大数据技术、编程语言和基础设施工具提供集中的参考文档
+- 为软件工程师和数据工程师提供技术学习材料和指南
+- 提供分布式系统和数据处理的最佳实践和实现模式
+- 建立完整的技术知识框架，查漏补缺，掌握全貌，方便后续查询和使用
 
-## Key Areas Covered
-- **Big Data Ecosystem**: Spark, Flink, Kafka, ClickHouse, Hadoop, HBase, Hive, Redis
-- **Programming Languages**: Java, Python, Scala, Shell scripting
-- **Infrastructure & DevOps**: Kubernetes, Git, Docker, system administration
-- **Emerging Technologies**: Large Language Models (LLM), AI/ML frameworks
-- **Development Tools**: Markdown documentation, HTML, React, Spring Boot
+## 核心技术领域
+- **大数据生态系统**: Spark, Flink, Kafka, ClickHouse, Hadoop, HBase, Hive, Redis, Elasticsearch
+- **编程语言**: Java, Python, Scala, Shell脚本
+- **基础设施与运维**: Kubernetes, Git, Docker, 系统管理
+- **新兴技术**: 大语言模型(LLM), AI/ML框架
+- **开发工具**: Markdown文档, HTML, React, Spring Boot
 
-## Target Audience
-- Software engineers working with distributed systems
-- Data engineers building data pipelines and analytics platforms
-- DevOps engineers managing cloud infrastructure
-- Technical leads architecting scalable systems
+## 目标用户
+- 从事分布式系统开发的软件工程师
+- 构建数据管道和分析平台的数据工程师
+- 管理云基础设施的运维工程师
+- 架构可扩展系统的技术负责人
+
+## 文档特色
+- 面向高频面试题，提供解题思路、方法和技巧
+- 重点讲解难以理解的复杂知识点，配备流程图便于理解
+- 包含业务使用经验总结、报错排查和优化手段
+- 展现形式丰富：表格、流程图、对比分析等
+- 知识点讲解详略得当，重难点着重讲解

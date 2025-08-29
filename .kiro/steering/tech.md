@@ -1,66 +1,116 @@
-# Technology Stack & Build System
+# 技术栈与文档规范
 
-## Documentation Format
-- **Primary Format**: Markdown (.md files)
-- **Language**: Mixed Chinese and English content
-- **Structure**: Hierarchical with detailed table of contents
+## 文档格式规范
+- **主要格式**: Markdown (.md文件)
+- **语言**: 中英文混合内容，主要使用中文
+- **结构**: 层次化结构，包含详细目录
 
-## File Organization
-- Numbered files (1-31) for main technical topics
-- Descriptive naming convention: `{number}.{technology}.md`
-- Comprehensive coverage from basic concepts to advanced implementations
+## 文件组织方式
+- 主要技术主题使用编号文件(1-32)
+- 描述性命名规范: `{编号}.{技术名称}.md`
+- 从基础概念到高级实现的全面覆盖
 
-## Key Technologies Documented
+## 核心技术文档
 
-### Big Data & Analytics
-- **Apache Spark**: Core concepts, RDD operations, DataFrame/Dataset APIs, source code analysis
-- **Apache Flink**: Stream processing, DataStream API, architecture patterns
-- **Apache Kafka**: Message streaming, distributed architecture, performance tuning
-- **ClickHouse**: Columnar database, query optimization, storage engines
-- **Hadoop Ecosystem**: HDFS, MapReduce, cluster management
-- **HBase**: NoSQL database operations, schema design
-- **Apache Hive**: Data warehousing, SQL-on-Hadoop
+### 大数据与分析
+- **Apache Spark**: 核心概念、RDD操作、DataFrame/Dataset API、源码分析
+- **Apache Flink**: 流处理、DataStream API、架构模式
+- **Apache Kafka**: 消息流、分布式架构、性能调优
+- **ClickHouse**: 列式数据库、查询优化、存储引擎
+- **Hadoop生态系统**: HDFS、MapReduce、集群管理
+- **HBase**: NoSQL数据库操作、模式设计
+- **Apache Hive**: 数据仓库、SQL-on-Hadoop
+- **Elasticsearch**: 搜索引擎、分布式架构、性能优化
 
-### Programming Languages
-- **Java**: Advanced features, JVM internals, concurrency, design patterns
-- **Python**: Language fundamentals, libraries, best practices
-- **Scala**: Functional programming, type system, Spark integration
-- **Shell Scripting**: System administration, text processing, automation
+### 编程语言
+- **Java**: 高级特性、JVM内部机制、并发、设计模式
+- **Python**: 语言基础、库、最佳实践
+- **Scala**: 函数式编程、类型系统、Spark集成
+- **Shell脚本**: 系统管理、文本处理、自动化
 
-### Infrastructure & DevOps
-- **Kubernetes**: Container orchestration, deployment patterns
-- **Git**: Version control workflows, branching strategies
-- **Docker**: Containerization (referenced in context)
+### 基础设施与运维
+- **Kubernetes**: 容器编排、部署模式
+- **Git**: 版本控制工作流、分支策略
+- **Docker**: 容器化技术
 
-### Development Tools
-- **Markdown**: Documentation standards and syntax
-- **HTML/CSS**: Web development basics
-- **React**: Frontend framework patterns
-- **Spring Boot**: Java application framework, annotations
+### 开发工具
+- **Markdown**: 文档标准和语法
+- **HTML/CSS**: Web开发基础
+- **React**: 前端框架模式
+- **Spring Boot**: Java应用框架、注解
 
-## Documentation Standards
-- Use detailed table of contents with anchor links
-- Include practical examples and code snippets
-- Provide both theoretical concepts and implementation details
-- Maintain consistent formatting across all documents
-- Use Chinese for main content with English technical terms
+## 文档编写标准
 
-## Common Commands & Operations
-Since this is a documentation repository, common operations include:
+### 内容组织原则
+- 使用详细目录和锚点链接
+- 包含实用示例和代码片段
+- 提供理论概念和实现细节
+- 保持所有文档的一致格式
+- 主要内容使用中文，技术术语保留英文
+
+### 结构层次要求
+- 注意结构层次合理，内容覆盖全面，简繁得当
+- 重点内容突出，简单内容概括
+- 段落布局科学，避免重复生成相近内容
+- 一个标题一个知识点，基于原标题扩充而不是新建标题
+
+### 内容质量要求
+- 对重要知识点、难理解点、复杂知识点着重讲解
+- 配备流程图等便于理解的图表
+- 补充内容要有关联、发散、对比、总结
+- 展现形式丰富：表格、流程图等，不只有文字
+- 知识点讲解详略得当，重难点着重讲，简单知识概括
+
+### 面试导向要求
+- 介绍内容面向高频面试题
+- 提供解题思路、解题方法、解题技巧
+- 面试题问答要有代表性、深度、广度、难度
+- 能显示高级程序员水平的内容
+
+### 技术细节要求
+- 介绍技术要讲清楚组成、功能、原理、注意问题、使用场景
+- 源码讲解清晰简明，突出重点，配备流程图
+- 添加技术业务使用经验、报错排查、优化手段
+- 针对名词术语要先解释，然后用表格流程图清楚说明
+
+### 格式规范要求
+- 先生成目录，再完善内容
+- 重点文字加粗突出
+- mermaid流程图命名用双引号包裹
+- 注意代码块对齐，避免渲染问题
+- 最多4级标题，细分用加粗序号表示
+- 控制文档8000行左右，过长可拆分
+
+### 图表使用规范
+- 流程图要清晰概括详实，显示逻辑关系过程步骤
+- 不同组件使用不同颜色区分
+- 节点很多时按功能关系划分子图，使用不同背景色
+- 控制节点数量和布局，避免文字太小
+- 展示过程优先流程图，展示差异优先表格
+
+## 常用操作命令
+作为文档仓库，常用操作包括：
 
 ```bash
-# View documentation
-cat {number}.{technology}.md
-grep -r "keyword" *.md
+# 查看文档
+cat {编号}.{技术}.md
+grep -r "关键词" *.md
 
-# Search specific topics
-find . -name "*.md" -exec grep -l "search_term" {} \;
+# 搜索特定主题
+find . -name "*.md" -exec grep -l "搜索词" {} \;
 
-# Navigate file structure
+# 浏览文件结构
 ls -la *.md
 ```
 
-## Version Control
-- Git-based version control with extensive history tracking
-- Files stored in `.history/` directory for change tracking
-- Regular updates and revisions to technical content
+## 版本控制
+- 基于Git的版本控制，广泛的历史跟踪
+- 文件存储在`.history/`目录进行变更跟踪
+- 定期更新和修订技术内容
+
+## 特殊要求
+- 大数据相关组件技术需要面试题和源码展示
+- 优先使用流程图、对比表格、简要文字描述代替冗长代码
+- 不准贴出太多代码，保持简短扼要，多用文字描述和示意图
+- 生成新概念术语时要添加注释说明
+- 控制每次生成内容，按段落功能模块拆分，分批次生成
